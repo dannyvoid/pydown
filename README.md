@@ -10,5 +10,3 @@ or really any error checking of any kind
 this might erase your list idk
 
 backup all your links yourself
-
-use at your own risk.
