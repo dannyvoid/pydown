@@ -5,6 +5,7 @@ from pathlib import Path
 def download(url):
     get_response = requests.get(url, stream=True)
     file_name = url.split("/")[-1]
+    file_name = os.path.join("downloads/", file_name)
     with open(file_name, "wb") as f:
         for chunk in get_response.iter_content(chunk_size=1024):
             if chunk:
@@ -15,6 +16,9 @@ def main():
 
     l = "urls.txt"
     path = Path(l)
+    
+    if not os.path.exists('downloads'):
+        os.makedirs('downloads')
 
     if path.is_file():
         if os.stat(l).st_size == 0:
