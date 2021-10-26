@@ -25,8 +25,9 @@ def main():
             print(f"please fill {l} with *valid* direct links to files *ONLY*")
         else:
             link_ = 0
+            with open(l) as f:
+                total_links = sum(1 for _ in f)
             with open(l) as links:
-                total_links = sum(1 for _ in links)
                 for line in links:
                     line = line.strip("\n")
                     line = line.strip("\t")
