@@ -1,19 +1,29 @@
 import requests, os
 from pathlib import Path
+from tqdm import tqdm
 
 
 def download(url):
-    get_response = requests.get(url, stream=True)
     file_name = url.split("/")[-1]
     file_name = os.path.join("downloads/", file_name)
-    with open(file_name, "wb") as f:
-        for chunk in get_response.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
+    
+    if not os.path.exists(file_name):
+        get_response = requests.get(url, stream=True)
+        total_size_in_bytes= int(get_response.headers.get('content-length', 0))
+        block_size = 1024
+        progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True)
+        
+        with open(file_name, "wb") as f:
+            for data in get_response.iter_content(block_size):
+                progress_bar.update(len(data))
+                f.write(data)
+        progress_bar.close()
+        
+        if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
+            print("ERROR, something went wrong")
 
 
 def main():
-
     l = "urls.txt"
     path = Path(l)
     
